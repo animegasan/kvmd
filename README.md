@@ -11,7 +11,7 @@
 
 ---
 
-KVMD Armbian merupakan software PiKVM yang bertujuan untuk membantu mengelola server atau workstation dari jarak jauh, terlepas dari kesehatan sistem operasi atau apakah sudah diinstal. Anda dapat memperbaiki masalah apa pun, mengonfigurasi BIOS, dan bahkan menginstal ulang OS menggunakan CD-ROM atau Flash Drive virtual. Karena harga Raspberry Pi yang tidak baik-baik saja, beberapa orang memulai project KVMD-ARMBIAN agar PiKVM dapat berjalan di Armbian.
+KVMD Armbian merupakan software PiKVM yang bertujuan untuk membantu mengelola server atau workstation dari jarak jauh, terlepas dari kesehatan sistem operasi atau apakah sudah diinstal sistem operasi. Anda dapat memperbaiki masalah apa pun, mengonfigurasi BIOS, dan bahkan menginstal ulang OS menggunakan CD-ROM atau Flash Drive virtual. Karena harga Raspberry Pi yang tidak baik-baik saja, beberapa orang memulai project KVMD-ARMBIAN agar PiKVM dapat berjalan di Armbian.
 
 Sumber KVMD Armbian dapat di akses ke halaman <a href="https://github.com/xe5700/kvmd-armbian" target="_blank">KVMD-ARMBIAN</a>.
 
