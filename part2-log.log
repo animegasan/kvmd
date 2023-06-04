@@ -1,0 +1,472 @@
+Running part 2 of PiKVM installer script for Armbian by @srepac
+
+-> Disabling nginx service, so that we can use kvmd-nginx instead
+Synchronizing state of nginx.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install disable nginx
+Removed "/etc/systemd/system/multi-user.target.wants/nginx.service".
+
+-> Creating symlinks for use with kvmd python scripts
+ln: failed to create symbolic link '/usr/local/lib/python3.11/dist-packages/kvmd*': File exists
+
+-> Creating kvmd-webterm homedir
+drwxr-xr-x 2 kvmd-webterm root 4096 Jun  4 16:20 /home/kvmd-webterm
+ipmi:
+    auth:
+        file: /etc/kvmd/ipmipasswd
+
+    kvmd:
+        timeout: 5.0
+        unix: /run/kvmd/kvmd.sock
+
+    server:
+        host: '::'
+        port: 623
+        timeout: 10.0
+
+    sol:
+        device: ''
+        proxy_port: 0
+        select_timeout: 0.1
+        speed: 115200
+
+
+janus:
+    check:
+        interval: 10.0
+        retries: 5
+        retries_delay: 5.0
+
+    cmd:
+        - /usr/bin/janus
+        - --disable-colors
+        - --plugins-folder=/usr/lib/ustreamer/janus
+        - --configs-folder=/etc/kvmd/janus
+        - --interface={src_ip}
+        - '{o_stun_server}'
+    cmd_append: []
+    cmd_remove: []
+    stun:
+        host: stun.l.google.com
+        port: 19302
+        retries: 5
+        retries_delay: 5.0
+        timeout: 5.0
+
+
+kvmd:
+    atx:
+        # type: ''
+        type: disabled
+
+    auth:
+        enabled: true
+        external:
+            type: ''
+
+        internal:
+            file: /etc/kvmd/htpasswd
+            force_users: []
+            type: htpasswd
+
+        totp:
+            secret:
+                file: /etc/kvmd/totp.secret
+
+
+
+    gpio:
+        drivers:
+            __gpio__:
+                device: /dev/gpiochip0
+                type: gpio
+
+
+        scheme:
+
+        state_poll: 0.1
+        view:
+            header:
+                title: GPIO
+
+            table: []
+
+
+    hid:
+        ignore_keys: []
+        keyboard:
+            device: /dev/kvmd-hid-keyboard
+            queue_timeout: 0.1
+            select_timeout: 0.1
+            write_retries: 150
+
+        keymap: /usr/share/kvmd/keymaps/en-us
+        mouse:
+            absolute: true
+            absolute_win98_fix: false
+            device: /dev/kvmd-hid-mouse
+            horizontal_wheel: true
+            queue_timeout: 0.1
+            select_timeout: 0.1
+            write_retries: 150
+
+        mouse_alt:
+            # device: ''
+            device: /dev/kvmd-hid-mouse-alt
+            horizontal_wheel: true
+            queue_timeout: 0.1
+            select_timeout: 0.1
+            write_retries: 150
+
+        mouse_x_range:
+            max: 32767
+            min: -32768
+
+        mouse_y_range:
+            max: 32767
+            min: -32768
+
+        noop: false
+        # type: ''
+        type: otg
+
+    info:
+        extras: /usr/share/kvmd/extras
+        fan:
+            daemon: kvmd-fan
+            state_poll: 5.0
+            timeout: 5.0
+            unix: ''
+
+        hw:
+            state_poll: 10.0
+            vcgencmd_cmd:
+                - /opt/vc/bin/vcgencmd
+
+        meta: /etc/kvmd/meta.yaml
+
+    log_reader:
+        enabled: true
+
+    msd:
+        # type: ''
+        type: disabled
+
+    ocr:
+        langs:
+            - eng
+        tessdata: /usr/share/tessdata
+
+    server:
+        access_log_format: '[%P / %{X-Real-IP}i] ''%r'' => %s; size=%b --- referer=''%{Referer}i''; user_agent=''%{User-Agent}i'''
+        heartbeat: 15.0
+        unix: /run/kvmd/kvmd.sock
+        unix_mode: 432
+        unix_rm: true
+
+    snapshot:
+        idle_interval: 0.0
+        live_interval: 0.0
+        online_delay: 5.0
+        retries: 10
+        retries_delay: 3.0
+        wakeup_key: ''
+        wakeup_move: 0
+
+    streamer:
+        # cmd:
+        #     - /bin/true
+        cmd:
+            - /usr/bin/ustreamer
+            - --device=/dev/kvmd-video
+            - --persistent
+            - --format=mjpeg
+            - --resolution={resolution}
+            - --desired-fps={desired_fps}
+            - --drop-same-frames=30
+            - --last-as-blank=0
+            - --unix={unix}
+            - --unix-rm
+            - --unix-mode=0660
+            - --exit-on-parent-death
+            - --process-name-prefix={process_name_prefix}
+            - --notify-parent
+            - --no-log-colors
+            - --sink=kvmd::ustreamer::jpeg
+            - --sink-mode=0660
+        # cmd_append: []
+        cmd_append:
+            - --slowdown
+        cmd_remove: []
+        desired_fps:
+            default: 40
+            max: 70
+            min: 0
+
+        # forever: false
+        forever: true
+        h264_bitrate:
+            default: 0
+            max: 20000
+            min: 25
+
+        h264_gop:
+            default: 30
+            max: 60
+            min: 0
+
+        process_name_prefix: kvmd/streamer
+        # quality: 80
+        quality: 0
+        reset_delay: 1.0
+        resolution:
+            # available: []
+            available:
+                - 1920x1080
+                - 1600x1200
+                - 1360x768
+                - 1280x1024
+                - 1280x960
+                - 1280x720
+                - 1024x768
+                - 800x600
+                - 720x576
+                - 720x480
+                - 640x480
+            # default: ''
+            default: 1280x720
+
+        shutdown_delay: 10.0
+        state_poll: 1.0
+        timeout: 2.0
+        unix: /run/kvmd/ustreamer.sock
+
+
+# logging: {}
+logging:
+    disable_existing_loggers: false
+    formatters:
+        console:
+            (): logging.Formatter
+            format: '{name:30.30} {levelname:>7} --- {message}'
+            style: '{'
+    handlers:
+        console:
+            class: logging.StreamHandler
+            formatter: console
+            level: DEBUG
+            stream: ext://sys.stderr
+    root:
+        handlers:
+        - console
+        level: INFO
+    version: 1
+otg:
+    config: PiKVM device
+    device_version: -1
+    devices:
+        drives:
+            count: 1
+            default:
+                cdrom: false
+                fua: true
+                removable: true
+                rw: true
+                stall: false
+
+            enabled: false
+            start: true
+
+        ethernet:
+            driver: ecm
+            enabled: false
+            host_mac: ''
+            kvm_mac: ''
+            start: true
+
+        hid:
+            keyboard:
+                start: true
+
+            mouse:
+                start: true
+
+
+        msd:
+            default:
+                cdrom: true
+                fua: true
+                removable: true
+                rw: false
+                stall: false
+
+            start: true
+
+        serial:
+            enabled: false
+            start: true
+
+
+    gadget: kvmd
+    init_delay: 3.0
+    manufacturer: PiKVM
+    max_power: 250
+    meta: /run/kvmd/otg
+    product: Composite KVM Device
+    product_id: 260
+    remote_wakeup: false
+    serial: CAFEBABE
+    udc: ''
+    usb_version: 512
+    user: kvmd
+    vendor_id: 7531
+
+otgnet:
+    commands:
+        post_start_cmd:
+            - /usr/bin/systemd-run
+            - --unit=kvmd-otgnet-dnsmasq
+            - /usr/sbin/dnsmasq
+            - --conf-file=/dev/null
+            - --pid-file
+            - --user=dnsmasq
+            - --interface={iface}
+            - --port=0
+            - --dhcp-range={dhcp_ip_begin},{dhcp_ip_end},24h
+            - --dhcp-leasefile=/run/kvmd/dnsmasq.lease
+            - --dhcp-option={dhcp_option_3}
+            - --dhcp-option=6
+            - --keep-in-foreground
+        post_start_cmd_append: []
+        post_start_cmd_remove: []
+        post_stop_cmd:
+            - /bin/true
+            - post-stop
+        post_stop_cmd_append: []
+        post_stop_cmd_remove: []
+        pre_start_cmd:
+            - /bin/true
+            - pre-start
+        pre_start_cmd_append: []
+        pre_start_cmd_remove: []
+        pre_stop_cmd:
+            - /usr/bin/systemctl
+            - stop
+            - kvmd-otgnet-dnsmasq
+        pre_stop_cmd_append: []
+        pre_stop_cmd_remove: []
+
+    firewall:
+        allow_icmp: true
+        allow_tcp: []
+        allow_udp:
+            - 67
+        forward_iface: ''
+        iptables_cmd:
+            - /usr/sbin/iptables
+            - --wait=5
+
+    iface:
+        ip_cmd:
+            - /usr/bin/ip
+        net: 169.254.0.0/28
+
+
+pst:
+    remount_cmd:
+        - /usr/bin/sudo
+        - --non-interactive
+        - /usr/bin/kvmd-helper-pst-remount
+        - '{mode}'
+    ro_cleanup_delay: 3.0
+    ro_retries_delay: 10.0
+    server:
+        access_log_format: '[%P / %{X-Real-IP}i] ''%r'' => %s; size=%b --- referer=''%{Referer}i''; user_agent=''%{User-Agent}i'''
+        heartbeat: 15.0
+        unix: /run/kvmd/pst.sock
+        unix_mode: 432
+        unix_rm: true
+
+
+vnc:
+    auth:
+        vencrypt:
+            enabled: true
+
+        vncauth:
+            enabled: false
+            file: /etc/kvmd/vncpasswd
+
+
+    desired_fps: 30
+    keymap: /usr/share/kvmd/keymaps/en-us
+    kvmd:
+        timeout: 5.0
+        unix: /run/kvmd/kvmd.sock
+
+    memsink:
+        h264:
+            drop_same_frames: 0.0
+            lock_timeout: 1.0
+            sink: ''
+            wait_timeout: 1.0
+
+        jpeg:
+            drop_same_frames: 1.0
+            lock_timeout: 1.0
+            # sink: ''
+            sink: kvmd::ustreamer::jpeg
+            wait_timeout: 1.0
+
+
+    server:
+        host: '::'
+        keepalive:
+            count: 3
+            enabled: true
+            idle: 10
+            interval: 3
+
+        max_clients: 10
+        no_delay: true
+        port: 5900
+        tls:
+            ciphers: ALL:@SECLEVEL=0
+            timeout: 30.0
+            x509:
+                cert: /etc/kvmd/vnc/ssl/server.crt
+                key: /etc/kvmd/vnc/ssl/server.key
+
+
+
+    streamer:
+        timeout: 5.0
+        unix: /run/kvmd/ustreamer.sock
+
+
+watchdog:
+    interval: 30
+    rtc: 0
+    timeout: 300
+
+Did kvmd -m run properly?  [y/n] y
+-> Enabling kvmd-nginx kvmd-webterm kvmd-otg kvmd-fix and kvmd services, but do not start them.
+Created symlink /etc/systemd/system/multi-user.target.wants/kvmd-nginx.service → /lib/systemd/system/kvmd-nginx.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/kvmd-webterm.service → /lib/systemd/system/kvmd-webterm.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/kvmd-otg.service → /lib/systemd/system/kvmd-otg.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/kvmd.service → /lib/systemd/system/kvmd.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/kvmd-fix.service → /lib/systemd/system/kvmd-fix.service.
+
+Check kvmd devices
+
+lrwxrwxrwx 1 root root 5 Jun  4 16:20 /dev/kvmd-hid-keyboard -> hidg0
+lrwxrwxrwx 1 root root 5 Jun  4 16:20 /dev/kvmd-hid-mouse -> hidg1
+lrwxrwxrwx 1 root root 5 Jun  4 16:20 /dev/kvmd-hid-mouse-alt -> hidg2
+lrwxrwxrwx 1 root root 6 Jun  4 16:20 /dev/kvmd-video -> video1
+
+You should see devices for keyboard, mouse, and video.
+
+Point a browser to https://armbian   ,   or mybee https://armbian.local
+     Login: admin/admin
+
+If it doesn't work, then reboot one last time.
+Please make sure kvmd services are running after reboot.
