@@ -5,6 +5,9 @@ https://github.com/ophub/amlogic-s9xxx-armbian/releases
 
 Cari dengan code name `amlogic_s905x`
 
+- USB HDMI Capture
+- USB to USB
+
 1. Update dan upgrade sistem
 ```
 apt update && apt upgrade -y
