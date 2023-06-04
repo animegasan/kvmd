@@ -30,7 +30,7 @@ mv install.sh install.sh.bak && mv config.sh config.sh.bak
 
 5. Download install.sh dan config.sh untuk STB Armbian
 ```
-
+wget https://raw.githubusercontent.com/animegasan/kvmd/main/install.sh && wget https://raw.githubusercontent.com/animegasan/kvmd/main/config.sh && chmod +x install.sh
 ```
 Note : Pada bagian `Do you want to apply custom patches?  [y/n]` pilih N
 
