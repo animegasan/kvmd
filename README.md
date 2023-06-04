@@ -43,3 +43,4 @@ Note : Pada bagian `Do you want to apply custom patches?  [y/n]` pilih N
 ```
 cd kvmd-armbian && ./install.sh
 ```
+Note : Pada bagian `Did kvmd -m run properly?  [y/n]` pilih Y
