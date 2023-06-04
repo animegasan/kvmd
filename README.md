@@ -26,7 +26,7 @@ Sumber KVMD Armbian dapat di akses ke halaman <a href="https://github.com/xe5700
 
 ---
 
-## Install
+## Step by Step Install KVMD Armbian
 
 1. Update dan upgrade sistem
 ```
