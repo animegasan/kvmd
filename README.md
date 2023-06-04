@@ -32,9 +32,14 @@ mv install.sh install.sh.bak && mv config.sh config.sh.bak
 ```
 wget https://raw.githubusercontent.com/animegasan/kvmd/main/install.sh && wget https://raw.githubusercontent.com/animegasan/kvmd/main/config.sh && chmod +x install.sh
 ```
+
+6. Install part 1 kvmd armbian
+```
+./install.sh
+```
 Note : Pada bagian `Do you want to apply custom patches?  [y/n]` pilih N
 
-6. Install script ke dua
+7. Install part 2 kvmd armbian
 ```
 cd kvmd-armbian && ./install.sh
 ```
