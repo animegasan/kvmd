@@ -24,6 +24,7 @@ mv install.sh install.sh.bak && mv config.sh config.sh.bak
 ```
 
 ```
+Note : Pada bagian `Do you want to apply custom patches?  [y/n]` pilih N
 
 6. Install script ke dua
 ```
