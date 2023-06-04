@@ -15,7 +15,7 @@ apt update && apt upgrade -y
 
 2. Install software pendukung dan restart STB Armbian
 ```
-apt install -y avahi-daemon git curl wget ntp && reboot
+apt install -y avahi-daemon ntp && reboot
 ```
 
 3. Clone project kvmd-armbian dan masuk ke folder clone
