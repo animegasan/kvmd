@@ -3,6 +3,8 @@
 Persyaratan untuk menginstall KVMD di STB Armbian adalah menggunakan Debian Bookworm yang dapat di download pada link berikut
 https://github.com/ophub/amlogic-s9xxx-armbian/releases
 
+Cari dengan code name `amlogic_s905x`
+
 1. Update dan upgrade sistem
 ```
 apt update && apt upgrade -y
